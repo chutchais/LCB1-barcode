@@ -1,0 +1,31 @@
+# docker-compose.yml
+
+version: '3'
+
+services:
+  barcode-server:
+    container_name: barcode-server
+    restart: always
+    build: ./src
+    expose:
+      - "8000"
+    # links:
+      # - postgres:postgres
+      # - redis:redis
+    networks:
+      - main
+    volumes:
+      # - web-django:/usr/src/payment
+      - web-static:/staticfiles
+    # env_file: .env
+    command: gunicorn qrcode.wsgi:application -w 2 -b :8000
+    ports:
+      - 8010:8000
+
+volumes:  
+  # web-django:
+  web-static:
+  # pgdata:
+
+networks:
+  main:

@@ -1,0 +1,4 @@
+# Byte-compiled / optimized / DLL files
+# Django #
+*.png
+qrcode/__pycache__/views.cpython-36.pyc
