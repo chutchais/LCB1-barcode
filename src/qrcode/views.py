@@ -134,7 +134,7 @@ def billing_qr_image(request):
 
 
 	# Put version on Right&Bottom
-	version = 'Version 1.4'
+	version = 'Version 1.5'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
 	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
@@ -164,7 +164,8 @@ def billing_barcode_image(request):
 		ref2 = '00' if terminal =='LCMT' else '01'
 		
 	amount	= 	request.GET['amount']
-	suffix 	=	'10'
+	# suffix 	=	'10' #TMB work, but KBank not working
+	suffix 	=	'00'
 
 	# Convert Ref1
 	ref1 = convert_ref1(ref1)
@@ -180,7 +181,9 @@ def billing_barcode_image(request):
 	# Modify on March 26, 2020
 	# To remove new line and remove Dot on amount
 
-	data = '|%s%s\r\n%s\r\n%s\r\n%s' % (taxId,suffix,ref1,ref2,amount.replace('.',''))
+	# data = '|%s%s\r\n%s\r\n%s\r\n%s' % (taxId,suffix,ref1,ref2,amount.replace('.',''))
+	# Update on Apr 30,2020 -- Remove New Line
+	data = '|%s%s\r%s\r%s\r%s' % (taxId,suffix,ref1,ref2,amount.replace('.',''))
 	print(data)
 	ean = EAN(data, writer=ImageWriter())
 	# ean.render(writer_options=ImageWriter(),text='sds')
@@ -207,7 +210,7 @@ def billing_barcode_image(request):
 
 
 	# Put version on Right&Bottom
-	version = 'Version 1.4'
+	version = 'Version 1.5'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
 	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
