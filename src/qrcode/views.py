@@ -95,7 +95,11 @@ def billing_qr_image(request):
 
 	merchant 		=   'LCB' if terminal == 'LCB1' else 'LCM'
 	merchantName	= 	'59%02d%s' % (len(merchant),merchant)
-	additional		=	'62160712%s001002020' % merchant
+	# additional		=	'62160712%s001002020' % merchant
+	# Modify by Chutchai on May 13,2020 -- version 1.6
+	UniqueNo		=	'D%s%s' % (merchant,ref1)
+	QRid			=	'07%02d%s' % (len(UniqueNo),UniqueNo)
+	additional		=	'62%02d%s' % (len(QRid),QRid)
 	additionalData 	=	'6304'
 
 	# print('Printing Data : %s' % data )
@@ -130,15 +134,15 @@ def billing_qr_image(request):
 	# print ('QR code width :%s , Text Width :%s' % (width,font_width))
 
 	location = ((width/2)-(font_width/2), height-22)
-	d.text(location, data, fill=None, font=font)
-
+	d.text(location, ref1, fill=None, font=font)
+	# data
 
 	# Put version on Right&Bottom
-	version = 'Version 1.5'
+	version = '1.6'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
 	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
-	location = (width-(font_width+50), height-18)
+	location = (width-(font_width), height-18)
 	d.text(location, version, fill=None, font=font)
 
 
@@ -210,7 +214,7 @@ def billing_barcode_image(request):
 
 
 	# Put version on Right&Bottom
-	version = 'Version 1.5'
+	version = 'Version 1.6'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
 	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
