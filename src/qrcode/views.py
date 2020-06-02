@@ -83,6 +83,13 @@ def billing_qr_image(request):
 	if ref2 == '':
 		ref2 = '00' if terminal =='LCMT' else '01'
 
+	# Added by Chutchai on June 02,2020 -- version 1.7
+	# To support QRid customization
+	if 'qrid' in  request.GET:
+		qrid		= 	request.GET['qrid']
+	else:
+		qrid = ''
+
 #	Arrange QR Data
 	payload 		= 	'000201'
 	methode 		=	'010212'
@@ -97,7 +104,11 @@ def billing_qr_image(request):
 	merchantName	= 	'59%02d%s' % (len(merchant),merchant)
 	# additional		=	'62160712%s001002020' % merchant
 	# Modify by Chutchai on May 13,2020 -- version 1.6
-	UniqueNo		=	'D%s%s' % (merchant,ref1)
+	# UniqueNo		=	'D%s%s' % (merchant,ref1)
+
+	# Modify by Chutchai on June 02,2020 -- version 1.7
+	UniqueNo		=	'D%s%s' % (merchant,ref1 if qrid == '' else qrid)
+
 	QRid			=	'07%02d%s' % (len(UniqueNo),UniqueNo)
 	additional		=	'62%02d%s' % (len(QRid),QRid)
 	additionalData 	=	'6304'
@@ -127,21 +138,21 @@ def billing_qr_image(request):
 	
 
 	# d.text(location, data, fill=None, font=helvetica)
-	data = terminal #'%s - %s' % (terminal,ref1)
+	data = ref1 if qrid == '' else qrid #terminal
 	font = ImageFont.truetype('arial.ttf', size=14)
 	ascent, descent = font.getmetrics()
 	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
 	# print ('QR code width :%s , Text Width :%s' % (width,font_width))
 
 	location = ((width/2)-(font_width/2), height-22)
-	d.text(location, ref1, fill=None, font=font)
+	d.text(location, ref1 if qrid == '' else qrid, fill=None, font=font)
 	# data
 
 	# Put version on Right&Bottom
-	version = '1.6'
+	version = '1.7'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
-	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
+	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(version)
 	location = (width-(font_width), height-18)
 	d.text(location, version, fill=None, font=font)
 
@@ -214,11 +225,11 @@ def billing_barcode_image(request):
 
 
 	# Put version on Right&Bottom
-	version = 'Version 1.6'
+	version = 'Version 1.7'
 	font = ImageFont.truetype('arial.ttf', size=12)
 	ascent, descent = font.getmetrics()
-	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(data)
-	location = (width-100, height-60)
+	(font_width, baseline), (offset_x, offset_y) = font.font.getsize(version)
+	location = (width-(font_width), height-60)
 	d.text(location, version, fill=(0,0,0), font=font)
 
 
