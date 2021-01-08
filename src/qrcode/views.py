@@ -68,6 +68,35 @@ def qr_image(request,data):
 	image_data = open("qr_out.png", "rb").read()
 	return HttpResponse(image_data, content_type="image/png")
 
+# Added on Jan 8,2021 -- To support print data Barcode(128)
+def barcode_image(request,data):
+	# import pyqrcode
+	# qr = pyqrcode.create(data)
+	# qr.png("qr.png", scale=6)
+
+	# from PIL import Image, ImageFont, ImageDraw
+	# im = Image.open("barcode.png")
+	# width, height = im.size
+	# helvetica = ImageFont.truetype("Helvetica.ttf", size=22)
+	# d = ImageDraw.Draw(im)
+	# location = (width/4, height-22)
+	# d.text(location, data, fill=None, font=helvetica)
+	# im.save('qr_out.png')
+	# image_data = open("qr_out.png", "rb").read()
+	# # 
+	from barcode.writer import ImageWriter
+	import barcode
+	EAN = barcode.get_barcode_class('code128')
+	ean = EAN(data, writer=ImageWriter())
+	# ean.render(writer_options=ImageWriter(),text='sds')
+	fullname = ean.save('barcode')
+
+	#Add Text below Barcode 
+	from PIL import Image, ImageFont, ImageDraw
+	im = Image.open("barcode.png")
+	image_data = open("barcode.png", "rb").read()
+	return HttpResponse(image_data, content_type="image/png")
+
 def billing_qr_image(request):
 	# taxId	= 	request.GET['tax']
 	ref1		= 	request.GET['ref1']

@@ -21,12 +21,13 @@ from django.urls import path
 from django.conf.urls import handler404, handler500
 from django.conf.urls import include, url
 # from . import views
-from .views import qr_image,read_qr,billing_qr_image,billing_barcode_image
+from .views import qr_image,read_qr,billing_qr_image,billing_barcode_image,barcode_image
 
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
 	url(r'^read/', read_qr,name='read'),
     url(r'^(?P<data>[-\w]+)/$', qr_image, name='create'),
+    url(r'^barcode/(?P<data>[-\w]+)/$', barcode_image, name='bar'),
 	url(r'^billing/qr', billing_qr_image, name='qr'),
     url(r'^billing/barcode', billing_barcode_image, name='barcode'),
     # url(r'^text/', include(('text.urls','text')), name='barcode'),
